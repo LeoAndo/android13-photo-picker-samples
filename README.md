@@ -5,7 +5,7 @@ Sample for [Photo picker](https://developer.android.com/about/versions/13/featur
 # Dev Memo
 - Photo pickerを使うと、Runtime PermissionなしでMediaにアクセスできる
 - [複数ファイルを同時に選択することも可能](https://developer.android.com/about/versions/13/features/photopicker#define_sharing_limitations)
-  - MediaStore.EXTRA_PICK_IMAGES_MAXに指定できる値は、2からMediaStore＃getPickImagesMaxLimit以下の正の整数まで。そうでない場合、Activity＃RESULT_CANCELEDが返される
+  - [MediaStore.EXTRA_PICK_IMAGES_MAX](https://developer.android.com/reference/android/provider/MediaStore#EXTRA_PICK_IMAGES_MAX)に指定できる値は、2から[MediaStore#getPickImagesMaxLimit](https://developer.android.com/reference/android/provider/MediaStore#getPickImagesMaxLimit())以下の正の整数まで。そうでない場合、Activity＃RESULT_CANCELEDが返される
 
 # Test Data
 - mp4
