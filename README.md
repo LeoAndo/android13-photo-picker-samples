@@ -19,7 +19,8 @@ Sample for [Photo picker](https://developer.android.com/about/versions/13/featur
 
 # For Kotlin
 
-# [For Java 11](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerJavaSample)
+# [For Java](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerJavaSample)
+- use Java 11 API
 
 # Capture
 
