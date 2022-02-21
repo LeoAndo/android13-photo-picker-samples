@@ -28,7 +28,7 @@ Sample for [Photo picker](https://developer.android.com/about/versions/13/featur
 - VideoView (AndroidView)
 
 # [For Kotlin](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerKotlinSample)
-- material3
+- material2
 
 # [For Java](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerJavaSample)
 - use Java 11 API
