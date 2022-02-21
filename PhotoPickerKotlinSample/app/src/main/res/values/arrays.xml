@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="types">
+        <item>all</item>
+        <item>video/*</item>
+        <item>video/webm</item>
+        <item>video/mp4</item>
+        <item>images/*</item>
+        <item>image/gif</item>
+        <item>image/png</item>
+        <item>image/jpeg</item>
+    </string-array>
+</resources>
