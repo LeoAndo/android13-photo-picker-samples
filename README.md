@@ -2,6 +2,11 @@
 
 Sample for [Photo picker](https://developer.android.com/about/versions/13/features#photo-picker) (Android 13 +)<br>
 [日本語版 README](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/README_JP)
+
+# development environment
+<img width="614" alt="スクリーンショット 2022-02-21 21 33 57" src="https://user-images.githubusercontent.com/16476224/154956110-46c5f9ac-53b9-4469-af07-40f36bcabf57.png">
+
+
 # Dev Memo
 - Photo picker allows you to access Media without Runtime Permission
 - [Define sharing limitations](https://developer.android.com/about/versions/13/features/photopicker#define_sharing_limitations)
@@ -9,6 +14,7 @@ Sample for [Photo picker](https://developer.android.com/about/versions/13/featur
 - The official documentation uses the deprecated onActivityResult, but you can use the recommended API ActivityResultLauncher.
   - https://github.com/LeoAndo/ActivityResultContractsKotlinSample
   - https://github.com/LeoAndo/ActivityResultContractsJavaSample 
+
 
 # Test Data
 - mp4
