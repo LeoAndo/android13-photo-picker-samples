@@ -3,7 +3,7 @@
 Sample for [Photo picker](https://developer.android.com/about/versions/13/features#photo-picker) (Android 13 +)<br>
 
 # Dev Memo
-- Photo pickerを使うと、Runtime PermissionなしでMediaにアクセスできる
+- Photo picker allows you to access Media without Runtime Permission
 - [Define sharing limitations](https://developer.android.com/about/versions/13/features/photopicker#define_sharing_limitations)
   - The value of this intent-extra should be a positive integer greater than 1 and less than or equal to [MediaStore#getPickImagesMaxLimit](https://developer.android.com/reference/android/provider/MediaStore#getPickImagesMaxLimit()), otherwise Activity#RESULT_CANCELED is returned.
 - The official documentation uses the deprecated onActivityResult, but you can use the recommended API ActivityResultLauncher.
