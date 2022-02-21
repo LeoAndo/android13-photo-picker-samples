@@ -28,7 +28,7 @@ Sample for [Photo picker](https://developer.android.com/about/versions/13/featur
 - use Java 11 API
 - Material2
 
-# Capture
+# Capture Pixel 4 API Tiramisu
 
 | Compose | View |
 |:---|:---:|
