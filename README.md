@@ -1,7 +1,7 @@
 # Overview
 
 Sample for [Photo picker](https://developer.android.com/about/versions/13/features#photo-picker) (Android 13 +)<br>
-
+[日本語版 README](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/README_JP)
 # Dev Memo
 - Photo picker allows you to access Media without Runtime Permission
 - [Define sharing limitations](https://developer.android.com/about/versions/13/features/photopicker#define_sharing_limitations)
