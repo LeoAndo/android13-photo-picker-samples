@@ -17,10 +17,12 @@ Sample for [Photo picker](https://developer.android.com/about/versions/13/featur
   - https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png
   - https://assets.pokemon.com/assets/cms2/img/pokedex/full/500.png 
 
-# For Compose
+# [For Compose](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerComposeSample)
+- material3
+- VideoViewのみ AndroidViewで実装
 
-
-# For Kotlin
+# [For Kotlin](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerKotlinSample)
+- material3
 
 # [For Java](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerJavaSample)
 - use Java 11 API
@@ -30,7 +32,7 @@ Sample for [Photo picker](https://developer.android.com/about/versions/13/featur
 
 | Compose | View |
 |:---|:---:|
-|<img src="" width=320 /> |<img src="https://github.com/LeoAndo/android-photo-picker-samples/blob/main/PhotoPickerJavaSample/capture.gif" width=320 /> |
+|<img src="https://github.com/LeoAndo/android-photo-picker-samples/blob/main/PhotoPickerComposeSample/capture.gif" width=320 /> |<img src="https://github.com/LeoAndo/android-photo-picker-samples/blob/main/PhotoPickerJavaSample/capture.gif" width=320 /> |
 
 # refs
 https://developer.android.com/about/versions/13/features#photo-picker<br>
