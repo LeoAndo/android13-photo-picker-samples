@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:hint="max Num Photos And Videos"
+            android:hint="max Num Photos And Videos(Multiple Mode Only)"
             android:visibility="gone"
             tools:visibility="visible">
 

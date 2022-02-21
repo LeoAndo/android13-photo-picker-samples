@@ -1,6 +1,7 @@
 package com.example.photopickerjavasample;
 
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.MimeTypeFilter;
 
@@ -35,9 +36,43 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private static final int PHOTO_PICKER_SINGLE_SELECT_REQUEST_CODE = 100;
-    private static final int PHOTO_PICKER_MULTI_SELECT_REQUEST_CODE = 200;
     private ImageView imageView;
+    private final ActivityResultLauncher<Intent> startForSingleModeResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                final int resultCode = result.getResultCode();
+                final Intent data = result.getData();
+                Log.d(TAG, " resultCode: " + resultCode + " data: " + data);
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    if (data == null) return;
+                    // Get photo picker response for single select.
+                    final Uri currentUri = data.getData();
+                    // Do stuff with the photo/video URI.
+                    handlePickerResponse(currentUri);
+                }
+            });
+    private final ActivityResultLauncher<Intent> startForMultipleModeResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                final int resultCode = result.getResultCode();
+                final Intent data = result.getData();
+                Log.d(TAG, " resultCode: " + resultCode + " data: " + data);
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    if (data == null) return;
+                    // output log.
+                    for (int i = 0; i < data.getClipData().getItemCount(); i++) {
+                        final Uri currentUri2 = data.getClipData().getItemAt(i).getUri();
+                        Log.d(TAG, "onActivityResult: currentUri" + currentUri2.toString());
+                        // Do stuff with each photo/video URI.
+                    }
+
+                    // Get photo picker response for multi select.
+                    final int itemCnt = data.getClipData().getItemCount();
+                    final int bound = (itemCnt == 1) ? itemCnt : itemCnt - 1;
+                    final int randomIndex = new Random().nextInt(bound);
+                    Log.d(TAG, "onActivityResult: randomIndex: " + randomIndex);
+                    var randomUri = data.getClipData().getItemAt(randomIndex).getUri();
+                    handlePickerResponse(randomUri);
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,14 +123,14 @@ public class MainActivity extends AppCompatActivity {
             switch (checkedViewId) {
                 case R.id.modeSingle:
                     final String selectedType = (String) spinnerType.getSelectedItem();
-                    launchSelectSinglePicker(selectedType);
+                    launchPickerSingleMode(selectedType);
                     break;
                 case R.id.modeMultiple:
                     edtNumEditable.ifPresentOrElse(editable -> {
                         try {
                             final String edtNumText = editable.toString();
                             final int maxNumPhotosAndVideos = Integer.parseInt(edtNumText);
-                            launchSelectMultiplePicker(maxNumPhotosAndVideos);
+                            launchPickerMultipleMode(maxNumPhotosAndVideos);
                         } catch (NumberFormatException ex) {
                             showDialog(ex.getLocalizedMessage());
                         }
@@ -105,39 +140,6 @@ public class MainActivity extends AppCompatActivity {
                     showDialog("checkedViewId: " + checkedViewId);
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK || data == null) {
-            showDialog("Handle error");
-            return;
-        }
-        switch (requestCode) {
-            case PHOTO_PICKER_SINGLE_SELECT_REQUEST_CODE:
-                // Get photo picker response for single select.
-                final Uri currentUri = data.getData();
-                // Do stuff with the photo/video URI.
-                handlePickerResponse(currentUri);
-                break;
-
-            case PHOTO_PICKER_MULTI_SELECT_REQUEST_CODE:
-
-                // output log.
-                for (int i = 0; i < data.getClipData().getItemCount(); i++) {
-                    final Uri currentUri2 = data.getClipData().getItemAt(i).getUri();
-                    Log.d(TAG, "onActivityResult: currentUri" + currentUri2.toString());
-                    // Do stuff with each photo/video URI.
-                }
-
-                // Get photo picker response for multi select.
-                int randomIndex = new Random().nextInt(data.getClipData().getItemCount() - 1);
-                Log.d(TAG, "onActivityResult: randomIndex: " + randomIndex);
-                var randomUri = data.getClipData().getItemAt(randomIndex).getUri();
-                handlePickerResponse(randomUri);
-                break;
-        }
     }
 
     private void handlePickerResponse(Uri currentUri) {
@@ -189,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
-    private void launchSelectMultiplePicker(int maxNumPhotosAndVideos) {
+    private void launchPickerMultipleMode(int maxNumPhotosAndVideos) {
         if (maxNumPhotosAndVideos < 2 || maxNumPhotosAndVideos > MediaStore.getPickImagesMaxLimit()) {
             Log.d(TAG, "getPickImagesMaxLimit: " + MediaStore.getPickImagesMaxLimit());
             showDialog("The value of this intent-extra should be a positive integer greater than 1 and less than or equal to MediaStore#getPickImagesMaxLimit, otherwise Activity#RESULT_CANCELED is returned.");
@@ -202,19 +204,19 @@ public class MainActivity extends AppCompatActivity {
         final Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
         intent.putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX, maxNumPhotosAndVideos);
         try {
-            startActivityForResult(intent, PHOTO_PICKER_MULTI_SELECT_REQUEST_CODE);
+            startForMultipleModeResult.launch(intent);
         } catch (ActivityNotFoundException ex) {
             showDialog(ex.getLocalizedMessage());
         }
     }
 
-    private void launchSelectSinglePicker(String type) {
+    private void launchPickerSingleMode(String type) {
         // Launches photo picker in single-select mode.
         // This means that the user can select one photo or video.
         final Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
         if (!"all".equals(type)) intent.setType(type);
         try {
-            startActivityForResult(intent, PHOTO_PICKER_SINGLE_SELECT_REQUEST_CODE);
+            startForSingleModeResult.launch(intent);
         } catch (ActivityNotFoundException ex) {
             showDialog(ex.getLocalizedMessage());
         }
