@@ -4,9 +4,9 @@ Sample for [Photo picker](https://developer.android.com/about/versions/13/featur
 
 # Dev Memo
 - Photo pickerを使うと、Runtime PermissionなしでMediaにアクセスできる
-- [複数ファイルを同時に選択することも可能](https://developer.android.com/about/versions/13/features/photopicker#define_sharing_limitations)
-  - [MediaStore.EXTRA_PICK_IMAGES_MAX](https://developer.android.com/reference/android/provider/MediaStore#EXTRA_PICK_IMAGES_MAX)に指定できる値は、2から[MediaStore#getPickImagesMaxLimit](https://developer.android.com/reference/android/provider/MediaStore#getPickImagesMaxLimit())以下の正の整数まで。そうでない場合、Activity＃RESULT_CANCELEDが返される
-- 公式ドキュメントでは、非推奨のonActivityResultを使用しているが、推奨APIのActivityResultLauncherを使用できる。
+- [Define sharing limitations](https://developer.android.com/about/versions/13/features/photopicker#define_sharing_limitations)
+  - The value of this intent-extra should be a positive integer greater than 1 and less than or equal to [MediaStore#getPickImagesMaxLimit](https://developer.android.com/reference/android/provider/MediaStore#getPickImagesMaxLimit()), otherwise Activity#RESULT_CANCELED is returned.
+- The official documentation uses the deprecated onActivityResult, but you can use the recommended API ActivityResultLauncher.
   - https://github.com/LeoAndo/ActivityResultContractsKotlinSample
   - https://github.com/LeoAndo/ActivityResultContractsJavaSample 
 
@@ -19,7 +19,7 @@ Sample for [Photo picker](https://developer.android.com/about/versions/13/featur
 
 # [For Compose](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerComposeSample)
 - material3
-- VideoViewのみ AndroidViewで実装
+- VideoView (AndroidView)
 
 # [For Kotlin](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerKotlinSample)
 - material3
