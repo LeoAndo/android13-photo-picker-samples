@@ -3,6 +3,8 @@
 Sample for [Photo picker](https://developer.android.com/about/versions/13/features#photo-picker) (Android 13 +)<br>
 [日本語版 README](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/README_JP)
 
+[If you have any questions, please contact discussions](https://github.com/LeoAndo/android-photo-picker-samples/discussions)
+
 # development environment
 <img width="614" alt="スクリーンショット 2022-02-21 21 33 57" src="https://user-images.githubusercontent.com/16476224/154956110-46c5f9ac-53b9-4469-af07-40f36bcabf57.png">
 
