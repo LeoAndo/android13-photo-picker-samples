@@ -12,6 +12,7 @@ import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.Companion.isPhotoPickerAvailable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.MimeTypeFilter
 import androidx.core.widget.doOnTextChanged
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        showToast("isPhotoPickerAvailable: ${isPhotoPickerAvailable()}")
         val spinnerType = findViewById<Spinner>(R.id.spinnerType)
         val buttonLaunchPicker = findViewById<Button>(R.id.buttonLaunchPicker)
         val layoutNum = findViewById<TextInputLayout>(R.id.layoutNum)
