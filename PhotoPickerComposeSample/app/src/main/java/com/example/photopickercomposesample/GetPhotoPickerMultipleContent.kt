@@ -7,10 +7,13 @@ import android.provider.MediaStore
 import android.app.Activity
 import android.content.ClipData
 import android.content.Context
-import android.net.Uri
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 
+@Deprecated(message = "Use ActivityResultContracts.PickMultipleVisualMedia()")
 class GetPhotoPickerMultipleContent : ActivityResultContract<MultipleInputData, ClipData?>() {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @CallSuper
     override fun createIntent(context: Context, input: MultipleInputData): Intent {
         val intent = Intent(MediaStore.ACTION_PICK_IMAGES)

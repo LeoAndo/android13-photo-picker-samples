@@ -1,6 +1,5 @@
 package com.example.photopickercomposesample
 
-import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -12,20 +11,21 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.Companion.isPhotoPickerAvailable
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,6 +40,11 @@ import java.util.*
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Toast.makeText(
+            this,
+            "isPhotoPickerAvailable: ${isPhotoPickerAvailable()}",
+            Toast.LENGTH_LONG
+        ).show()
         setContent {
             PhotoPickerComposeSampleTheme {
                 // A surface container using the 'background' color from the theme
@@ -54,7 +59,6 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        private const val TAG = "MainActivity"
         fun startVideoActivity(context: Context, uri: Uri?) {
             val starter = Intent(context, VideoActivity::class.java)
             starter.data = uri
@@ -87,11 +91,6 @@ fun HomeScreen(
         Box {
             OutlinedTextField(
                 value = MediaType.findTypeNameByOrdinal(typeOrdinal),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    disabledTextColor = LocalContentColor.current.copy(
-                        LocalContentAlpha.current
-                    )
-                ),
                 onValueChange = { },
                 enabled = false,
                 modifier = Modifier
@@ -147,11 +146,15 @@ fun HomeScreen(
                 }
             }
         }
+
+        // TODO: jetpackライブラリを使う場合、最大数の指定は動的に変更できない作りなので、蓋閉じする.
         OutlinedTextField(
             value = maxNum,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             onValueChange = { maxNum = it },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .alpha(0f),
             isError = TextUtils.isEmpty(maxNum) || !TextUtils.isDigitsOnly(maxNum),
             label = {
                 Text(
@@ -162,9 +165,8 @@ fun HomeScreen(
 
         var imageUri by remember { mutableStateOf<Pair<Uri?, MediaType?>>(Pair(null, null)) }
         val startForSingleModeResult =
-            rememberLauncherForActivityResult(GetPhotoPickerSingleContent()) { uri: Uri? ->
-                // Get photo picker response for single select.
-                Log.d("", "GetPhotoPickerSingleContent: uri: $uri")
+            rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                Log.d("MainActivity", "Get photo picker response for single select: uri: $uri")
                 // Do stuff with the photo/video URI.
                 val (resUri, resType) = handlePickerResponse(context, uri)
                 when (resType) {
@@ -186,39 +188,37 @@ fun HomeScreen(
                 }
             }
         val startForMultipleModeResult =
-            rememberLauncherForActivityResult(GetPhotoPickerMultipleContent()) { data: ClipData? ->
-                Log.d("", "GetPhotoPickerMultipleContent: clipData: $data")
-                val clipData = data ?: return@rememberLauncherForActivityResult
-                // output log.
-                (0 until clipData.itemCount).forEach { i ->
-                    val currentUri2 = clipData.getItemAt(i).uri
-                    Log.d("", "onActivityResult: currentUri$currentUri2")
-                    // Do stuff with each photo/video URI.
-                }
-                // Get photo picker response for multi select.
-                val itemCnt = clipData.itemCount
-                val bound = if (itemCnt == 1) itemCnt else itemCnt - 1
-                val randomIndex = Random().nextInt(bound)
-                Log.d("", "onActivityResult: itemCnt: $itemCnt")
-                Log.d("", "onActivityResult: randomIndex: $randomIndex")
-                val randomUri = clipData.getItemAt(randomIndex).uri
-                val (resUri, resType) = handlePickerResponse(context, randomUri)
-                when (resType) {
-                    MediaType.IMAGE_ALL, MediaType.IMAGE_GIF -> {
-                        Toast.makeText(context, "TODO impl...", Toast.LENGTH_SHORT).show()
+            rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
+                Log.d("MainActivity", "GetPhotoPickerMultipleContent: uris: $uris")
+                if (uris.isNotEmpty()) {
+                    Log.d("MainActivity", "Number of items selected: ${uris.size}")
+                    // output log.
+                    uris.forEach { currentUri -> Log.d("MainActivity", "currentUri $currentUri") }
+
+                    // Get photo picker response for multi select.
+                    val randomIndex = Random().nextInt(uris.size)
+                    Log.d("MainActivity", "size: ${uris.size} , randomIndex: $randomIndex")
+                    val randomUri = uris[randomIndex]
+                    val (resUri, resType) = handlePickerResponse(context, randomUri)
+                    when (resType) {
+                        MediaType.IMAGE_ALL, MediaType.IMAGE_GIF -> {
+                            Toast.makeText(context, "TODO impl...", Toast.LENGTH_SHORT).show()
+                        }
+                        MediaType.IMAGE_PNG, MediaType.IMAGE_JPG -> {
+                            imageUri = Pair(resUri, resType)
+                        }
+                        MediaType.VIDEO_ALL, MediaType.VIDEO_WEBM -> {
+                            Toast.makeText(context, "TODO impl...", Toast.LENGTH_SHORT).show()
+                        }
+                        MediaType.VIDEO_MP4 -> {
+                            MainActivity.startVideoActivity(context, resUri)
+                        }
+                        null -> {
+                            Toast.makeText(context, "handle error...", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                    MediaType.IMAGE_PNG, MediaType.IMAGE_JPG -> {
-                        imageUri = Pair(resUri, resType)
-                    }
-                    MediaType.VIDEO_ALL, MediaType.VIDEO_WEBM -> {
-                        Toast.makeText(context, "TODO impl...", Toast.LENGTH_SHORT).show()
-                    }
-                    MediaType.VIDEO_MP4 -> {
-                        MainActivity.startVideoActivity(context, resUri)
-                    }
-                    null -> {
-                        Toast.makeText(context, "handle error...", Toast.LENGTH_SHORT).show()
-                    }
+                } else {
+                    Log.d("PhotoPicker", "No media selected")
                 }
             }
         OutlinedButton(
@@ -227,14 +227,15 @@ fun HomeScreen(
                 if (selectedOption == radioOptions[0]) {
                     // single mode
                     startForSingleModeResult.launch(
-                        SingleInputData(
-                            MediaType.findTypeNameByOrdinal(
-                                typeOrdinal
-                            )
-                        )
+                        PickVisualMediaRequest.Builder()
+                            .setMediaType(
+                                ActivityResultContracts.PickVisualMedia.SingleMimeType(
+                                    MediaType.findTypeNameByOrdinal(typeOrdinal)
+                                )
+                            ).build()
                     )
                 } else if (selectedOption == radioOptions[1]) {
-                    startForMultipleModeResult.launch(MultipleInputData(maxNum.toInt()))
+                    startForMultipleModeResult.launch(PickVisualMediaRequest(mediaType = ActivityResultContracts.PickVisualMedia.ImageAndVideo))
                 }
             },
             enabled = !TextUtils.isEmpty(maxNum) && TextUtils.isDigitsOnly(maxNum),
@@ -253,7 +254,7 @@ fun HomeScreen(
 }
 
 internal fun handlePickerResponse(context: Context, uri: Uri?): Pair<Uri?, MediaType?> {
-    Log.d("", "handlePickerResponse: currentUri: $uri")
+    Log.d("MainActivity", "handlePickerResponse: currentUri: $uri")
     val currentUri = uri ?: return Pair(null, null)
     val type = getMediaType(context, currentUri) ?: return Pair(null, null)// get media type
     return Pair(currentUri, type)
