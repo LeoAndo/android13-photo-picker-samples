@@ -191,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
+    // TODO: 2022/10/24 jetpackライブラリ内部処理 (new PickVisualMediaRequest.Builder()) がJavaから呼び出す作りになっていない
+    // https://developer.android.com/training/data-storage/shared/photopicker#select-multiple-items
     private void launchPickerMultipleMode(int maxNumPhotosAndVideos) {
         if (maxNumPhotosAndVideos < 2 || maxNumPhotosAndVideos > MediaStore.getPickImagesMaxLimit()) {
             Log.d(TAG, "getPickImagesMaxLimit: " + MediaStore.getPickImagesMaxLimit());
@@ -210,6 +212,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // TODO: 2022/10/24 jetpackライブラリ内部処理 (new PickVisualMediaRequest.Builder()) がJavaから呼び出す作りになっていない
+    // https://developer.android.com/training/data-storage/shared/photopicker#select-single-item
     private void launchPickerSingleMode(String type) {
         // Launches photo picker in single-select mode.
         // This means that the user can select one photo or video.
