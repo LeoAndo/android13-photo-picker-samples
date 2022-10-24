@@ -8,6 +8,7 @@ import android.app.Activity
 import android.content.Context
 import android.net.Uri
 
+@Deprecated(message = "Use ActivityResultContracts.PickVisualMedia()")
 class GetPhotoPickerSingleContent : ActivityResultContract<SingleInputData, Uri?>() {
     @CallSuper
     override fun createIntent(context: Context, input: SingleInputData): Intent {
