@@ -26,13 +26,16 @@ Sample for [Photo picker](https://developer.android.com/about/versions/13/featur
 # [For Compose](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerComposeSample)
 - material3
 - VideoView (AndroidView)
+- Use Jetpack Library API
 
 # [For Kotlin](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerKotlinSample)
 - material2
+- Use Jetpack Library API
 
 # [For Java](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerJavaSample)
 - use Java 11 API
 - Material2
+- Not Use Jetpack Library API
 
 # Capture Pixel 4 API Tiramisu
 
