@@ -20,13 +20,16 @@ Sample for [Photo picker](https://developer.android.com/about/versions/13/featur
 # [For Compose](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerComposeSample)
 - material3
 - VideoViewのみ AndroidViewで実装
+- Jetpackの互換性APIを使用
 
 # [For Kotlin](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerKotlinSample)
 - material3
+- Jetpackの互換性APIを使用
 
 # [For Java](https://github.com/LeoAndo/android-photo-picker-samples/tree/main/PhotoPickerJavaSample)
 - use Java 11 API
 - Material2
+- Jetpackの互換性API 未使用
 
 # Capture
 
